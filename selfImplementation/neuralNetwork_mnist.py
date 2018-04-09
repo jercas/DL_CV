@@ -17,6 +17,7 @@ from icecream import ic
 print("[INFO] loading MNIST (sample) dataset...")
 digits = datasets.load_digits()
 data = digits.data.astype("float")
+
 # feature scaling: min/max normalizing.
 data = (data - data.min()) / (data.max() - data.min())
 print("[INFO] samples: {}, dim: {}".format(data.shape[0], data.shape[1]))
@@ -39,9 +40,7 @@ nn.fit(trainX, trainY, epochs=1000)
 # Evaluate the trained network.
 print("[INFO] evaluating network...")
 predictions = nn.predict(testX)
-ic(predictions)
 # argmax() -- return the index of the label with the highest predicted probability.
-predictions = predictions.argmax(axis=1)
-ic(predictions)
-print(classification_report(testY.argmax(axis=1), predictions))
+print(classification_report(testY.argmax(axis=1), predictions.argmax(axis=1),
+                            target_names=['零','壹','贰','叁','肆','伍','陆','柒','捌','玖']))
 
