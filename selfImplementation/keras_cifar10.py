@@ -32,15 +32,18 @@ ic(args)
 # Convert the data type from unsigned 8-bit integers to floating point, followed by scale the RGB pixels to the range [0, 1.0].
 trainX = trainX.astype("float") / 255.0
 testX = testX.astype("float") / 255.0
+
 # Reshape design matrix(flatten to 1-dim), 3072-dim = (32*32)pixels*3channels.
 # trainX.shape() - from (50000, 32, 32, 3) to (50000, 3072)
 trainX = trainX.reshape((trainX.shape[0], 3072))
 # testX.shape() - from (10000, 32, 32, 3) to (10000, 3072)
 testX = testX.reshape((testX.shape[0], 3072))
+
 # One-hot encoding: convert the labels from integers to vectors.
 lb = LabelBinarizer()
 trainY = lb.fit_transform(trainY)
 testY = lb.fit_transform(testY)
+
 # Initialize the label names of the CIFAR-10 dataset for classification_report() tabulate.
 labelNames = ["airplane",
               "automobile",

@@ -33,7 +33,7 @@ class SimpleDatasetLoader:
 
 			# Check to see if preprocessors are not None.
 			if self.preprocessors is not None:
-				# Loop over the preprocessors and apply each to the image.
+				# Loop over the preprocessors and apply each to the image in a given sequential order.
 				for preprocessor in self.preprocessors:
 					image = preprocessor.preprocess(image)
 
