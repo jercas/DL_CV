@@ -21,6 +21,7 @@ import argparse
 # Construct the argument parser and parse the arguments.
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--dataset", required=True, help="path to input dataset")
+ap.add_argument("-m", "--model", required=True, help="path to store model")
 args = vars(ap.parse_args())
 
 # Grab the list of images that we'll be describing.
@@ -56,6 +57,10 @@ model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy
 print("[INFO] training network...")
 # 32 images will be presented to the network at a time.
 Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=32, epochs=100, verbose=1)
+
+# Save
+print("[INFO] serializing network...")
+model.save(args["model"])
 
 # Evaluate
 print("[INFO] evaluating network...")
