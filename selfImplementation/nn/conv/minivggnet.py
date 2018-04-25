@@ -29,10 +29,10 @@ class MiniVGGNet:
 		# First (CONV=>RELU=>BN)*2 =>POOL=>DO layer set
 		model.add(Conv2D(32, (3, 3), padding="same", input_shape=inputShape, name="block1_conv1"))
 		model.add(Activation("relu"))
-		#model.add(BatchNormalization(axis=chanDim))
+		model.add(BatchNormalization(axis=chanDim))
 		model.add(Conv2D(32, (3, 3), padding="same", input_shape=inputShape, name="block1_conv2"))
 		model.add(Activation("relu"))
-		#model.add(BatchNormalization(axis=chanDim))
+		model.add(BatchNormalization(axis=chanDim))
 		# Keras implicitly assumes stride to be equal to the max pooling size (2,2).
 		model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), name="block1_pool"))
 		# A node from the POOL layer will randomly disconnect from the next layer with probability of 25%.
@@ -41,10 +41,10 @@ class MiniVGGNet:
 		# Second (CONV=>RELU=>BN)*2 =>POOL=>DO layer set
 		model.add(Conv2D(64, (3, 3), padding="same", input_shape=inputShape, name="block2_conv1"))
 		model.add(Activation("relu"))
-		#model.add(BatchNormalization(axis=chanDim))
+		model.add(BatchNormalization(axis=chanDim))
 		model.add(Conv2D(64, (3, 3), padding="same", input_shape=inputShape, name="block2_conv2"))
 		model.add(Activation("relu"))
-		#model.add(BatchNormalization(axis=chanDim))
+		model.add(BatchNormalization(axis=chanDim))
 		# Keras implicitly assumes stride to be equal to the max pooling size (2,2).
 		model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2), name="block2_pool"))
 		# A node from the POOL layer will randomly disconnect from the next layer with probability of 25%.
@@ -55,7 +55,7 @@ class MiniVGGNet:
 		model.add(Dense(512))
 		model.add(Activation("relu"))
 		# FC network do not need to assign specific axis to apply normalize.
-		#model.add(BatchNormalization())
+		model.add(BatchNormalization())
 		model.add(Dropout(0.5))
 
 		# classify.

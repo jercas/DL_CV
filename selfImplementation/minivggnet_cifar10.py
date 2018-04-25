@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from keras.optimizers import SGD
 from keras.datasets import cifar10
-from keras.callbacks import LearningRateScheduler
+from keras.callbacks import LearningRateScheduler, ModelCheckpoint
 
 import matplotlib
 # Set matplotlib backend to Agg to indicate to create a non-interactive figure that will simply be saved to disk.
@@ -16,16 +16,25 @@ import matplotlib
 #(via SSH, for instance), X11 session may timeout. If that happens, matplotlib will error out when it tries to display figure.
 matplotlib.use("Agg")
 
+from callbacks.trainingMonitor import TrainingMonitor
 from nn.conv.minivggnet import MiniVGGNet
 from stepBased_lr_decay import stepBased_decay
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
+import os
 
 # Construct the argument parse and parse the arguments.
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True, help="path to the output loss/accuracy plot")
+ap.add_argument("-m", "--monitor", required=False, default=False,
+                help="decide whether to use training monitor which can plot loss curve at the end of every epoch.")
+ap.add_argument("-c", "--checkpoint", required=False, defalut=False,
+                help="decide whether to store checkpoint which can serialized models during the training process on each improvement epoch.")
 args = vars(ap.parse_args())
+
+# Show information on the process ID.
+print("[INFO] process ID: {}".format(os.getpid()))
 
 # Grab the MNIST dataset, pre-segmented into training and testing split(50000:10000 images, per 5000:1000 a class).
 ((trainX, trainY), (testX, testY)) = cifar10.load_data()
@@ -52,11 +61,12 @@ labelNames = ["airplane",
 
 # Initialize the optimizer and model.
 print("[INFO] compiling model...")
+"""
 # Time-based decay: slowly reduce the learning rate over time, common setting for decay is to divide the initial lr
 #by total number of epochs.(here 0.01/40)
 opt = SGD(lr=0.01, decay=0.01/40, momentum=0.9, nesterov=True)
-
 """
+
 # Step-based decay: alpha = initialAlpha * (factor ** np.floor((1 + epoch) / dropEvery))
 # lr parameter can be leave out entirely since it is using the LearningRateScheduler callback.
 opt = SGD(momentum=0.9, nesterov=True)
@@ -65,18 +75,40 @@ opt = SGD(momentum=0.9, nesterov=True)
 # Keras will call callbacks at the start or end of every epoch, mini-batch update, etc.
 # Then 'LearningRateSchedular' will call 'stepBased_decay' at the end of every epoch, decide whether to update learning 
 #rate prior to the next epoch starting. 
-callbacks = [LearningRateSchedular(stepBased_decay)]
-"""
+callbacks = [LearningRateScheduler(stepBased_decay)]
+
 model = MiniVGGNet.build(width=32, height=32, depth=3, classes=10)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 model.summary()
 
+if args["monitor"] is True:
+	figurePath = os.path.sep.join([args["output"], "{}.png".format(os.getpid())])
+	jsonPath = os.path.sep.join([args["output"], "{}.json".format(os.getpid())])
+	# Construct the set of callbacks.
+	callbacks.append(TrainingMonitor(figurePath=figurePath, jsonPath=jsonPath))
+
+if args["checkpoint"] is True:
+	# A template string value that keras uses when writing checkpoing-models to disk based on its epoch and the
+	#validation value on the current epoch.
+	fname = os.path.sep.join([args["checkpoint"], "checkpoint-{epoch:03d}-{val_loss:.4f}.hdf5"])
+	# monitor -- what metric would like to monitor;
+	# mode -- controls whether the ModelCheckpoint be looking for values that minimize metric or maximize it in the contrary.
+	#         such as, if you monitor val_loss, you would like to minimize it and if monitor equals to val_acc then you should maximize it.
+	# save_best_only -- ensures the latest best model (according to the metric monitored) will not be overwritten.
+	# verbose=1 -- simply logs a notification to terminal when a model is being serialized to disk during training.
+	# period -- the interval epochs between two saved checkpoints.
+	checkpoint = ModelCheckpoint(filepath=fname, monitor="val_loss", mode="min", save_best_only=True, verbose=1)
+	# Construct the set of callbacks.
+	callbacks.append(checkpoint)
+
 # Train.
 print("[INFO] training network...")
+"""
 Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1)
 """
-Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1, callbacks=callbacks)
-"""
+#Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1, callbacks=callbacks)
+Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=100, verbose=1, callbacks=callbacks)
+
 
 # Evaluate.
 print("[INFO] evaluating network...")
