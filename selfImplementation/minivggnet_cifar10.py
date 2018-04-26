@@ -27,9 +27,9 @@ import os
 # Construct the argument parse and parse the arguments.
 ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", required=True, help="path to the output loss/accuracy plot")
-ap.add_argument("-m", "--monitor", required=False, default=False,
+ap.add_argument("-m", "--monitor", required=False, action="store_true",
                 help="decide whether to use training monitor which can plot loss curve at the end of every epoch.")
-ap.add_argument("-c", "--checkpoint", required=False, defalut=False,
+ap.add_argument("-c", "--checkpoint", required=False,
                 help="decide whether to store checkpoint which can serialized models during the training process on each improvement epoch.")
 args = vars(ap.parse_args())
 
@@ -81,16 +81,24 @@ model = MiniVGGNet.build(width=32, height=32, depth=3, classes=10)
 model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 model.summary()
 
-if args["monitor"] is True:
-	figurePath = os.path.sep.join([args["output"], "{}.png".format(os.getpid())])
-	jsonPath = os.path.sep.join([args["output"], "{}.json".format(os.getpid())])
+if args["monitor"]:
+	if os.path.exists(os.path.sep.join([args["output"], "{}".format(os.getpid())])) != True:
+		os.mkdir(os.path.sep.join([args["output"], "{}".format(os.getpid())]))
+
+	print("\n[INFO] monitor module establish!")
+	figurePath = os.path.sep.join([args["output"], "{}".format(os.getpid()), "{epoch:03d}-{val_loss:.4f}.png"])
+	jsonPath = os.path.sep.join([args["output"], "{}".format(os.getpid()), "{}.json".format(os.getpid())])
 	# Construct the set of callbacks.
 	callbacks.append(TrainingMonitor(figurePath=figurePath, jsonPath=jsonPath))
 
-if args["checkpoint"] is True:
-	# A template string value that keras uses when writing checkpoing-models to disk based on its epoch and the
-	#validation value on the current epoch.
-	fname = os.path.sep.join([args["checkpoint"], "checkpoint-{epoch:03d}-{val_loss:.4f}.hdf5"])
+if args["checkpoint"]:
+	if os.path.exists(os.path.sep.join([args["checkpoint"], "{}".format(os.getpid())])) != True:
+		os.mkdir(os.path.sep.join([args["checkpoint"], "{}".format(os.getpid())]))
+
+	print("\n[INFO] checkpoint module establish!")
+	# A template string value that keras uses when writing checkpoing-models to disk based on its epoch and the validation
+	#value on the current epoch.
+	fname = os.path.sep.join([args["checkpoint"], "{}".format(os.getpid()), "checkpoint-{epoch:03d}-{val_loss:.4f}.hdf5"])
 	# monitor -- what metric would like to monitor;
 	# mode -- controls whether the ModelCheckpoint be looking for values that minimize metric or maximize it in the contrary.
 	#         such as, if you monitor val_loss, you would like to minimize it and if monitor equals to val_acc then you should maximize it.
@@ -106,9 +114,7 @@ print("[INFO] training network...")
 """
 Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1)
 """
-#Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1, callbacks=callbacks)
 Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=100, verbose=1, callbacks=callbacks)
-
 
 # Evaluate.
 print("[INFO] evaluating network...")
@@ -126,5 +132,5 @@ plt.title("Training Loss and Accuracy")
 plt.xlabel("Epoch #")
 plt.ylabel("Loss/Accuracy")
 plt.legend()
-plt.savefig(args["output"])
+plt.savefig("{}.png".format(args["output"]))
 plt.show()

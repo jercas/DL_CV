@@ -95,5 +95,6 @@ class TrainingMonitor(BaseLogger):
 			plt.ylabel("Loss/Accuracy")
 			plt.legend()
 			plt.savefig(self.figurePath)
+			print("[INFO] {} has saved...".format(self.figurePath))
 			plt.close()
 
