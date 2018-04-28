@@ -82,23 +82,27 @@ model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy
 model.summary()
 
 if args["monitor"]:
-	if os.path.exists(os.path.sep.join([args["output"], "{}".format(os.getpid())])) != True:
-		os.mkdir(os.path.sep.join([args["output"], "{}".format(os.getpid())]))
+	if not os.path.exists("{}".format(args["output"])):
+		os.mkdir("{}".format(args["output"]))
+	if not os.path.exists("{}/{}".format(args["output"], os.getpid())):
+		os.mkdir("{}/{}".format(args["output"], os.getpid()))
 
 	print("\n[INFO] monitor module establish!")
-	figurePath = os.path.sep.join([args["output"], "{}".format(os.getpid()), "{epoch:03d}-{val_loss:.4f}.png"])
-	jsonPath = os.path.sep.join([args["output"], "{}".format(os.getpid()), "{}.json".format(os.getpid())])
+	figurePath = "{}/{}".format(args["output"], os.getpid())
+	jsonPath   = "{}/{}/{}.json".format(args["output"], os.getpid(), os.getpid())
 	# Construct the set of callbacks.
 	callbacks.append(TrainingMonitor(figurePath=figurePath, jsonPath=jsonPath))
 
 if args["checkpoint"]:
-	if os.path.exists(os.path.sep.join([args["checkpoint"], "{}".format(os.getpid())])) != True:
-		os.mkdir(os.path.sep.join([args["checkpoint"], "{}".format(os.getpid())]))
+	if not os.path.exists("{}".format(args["checkpoint"])):
+		os.mkdir("{}".format(args["checkpoint"]))
+	if not os.path.exists("{}/{}".format(args["checkpoint"], os.getpid())):
+		os.mkdir("{}/{}".format(args["checkpoint"], os.getpid()))
 
-	print("\n[INFO] checkpoint module establish!")
+	print("\n[INFO] checkpoint module establish!\n")
 	# A template string value that keras uses when writing checkpoing-models to disk based on its epoch and the validation
 	#value on the current epoch.
-	fname = os.path.sep.join([args["checkpoint"], "{}".format(os.getpid()), "checkpoint-{epoch:03d}-{val_loss:.4f}.hdf5"])
+	fname = os.path.join("{}/{}/".format(args["checkpoint"], os.getpid()), "checkpoint-{epoch:03d}-{val_loss:.4f}.hd5f")
 	# monitor -- what metric would like to monitor;
 	# mode -- controls whether the ModelCheckpoint be looking for values that minimize metric or maximize it in the contrary.
 	#         such as, if you monitor val_loss, you would like to minimize it and if monitor equals to val_acc then you should maximize it.
@@ -111,10 +115,7 @@ if args["checkpoint"]:
 
 # Train.
 print("[INFO] training network...")
-"""
 Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1)
-"""
-Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=100, verbose=1, callbacks=callbacks)
 
 # Evaluate.
 print("[INFO] evaluating network...")

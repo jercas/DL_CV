@@ -1,5 +1,5 @@
 """
-Created on Mon Apr 24 16:42:00 2018
+Created on Tue Apr 24 16:42:00 2018
 
 @author: jercas
 """
@@ -94,7 +94,7 @@ class TrainingMonitor(BaseLogger):
 			plt.xlabel("Epoch #")
 			plt.ylabel("Loss/Accuracy")
 			plt.legend()
-			plt.savefig(self.figurePath)
-			print("[INFO] {} has saved...".format(self.figurePath))
+			plt.savefig("{}/{}".format(self.figurePath, epoch))
+			print("[INFO] {}/{} has saved...".format(self.figurePath, epoch))
 			plt.close()
 

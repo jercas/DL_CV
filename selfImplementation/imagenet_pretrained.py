@@ -1,5 +1,5 @@
 """
-Created on Mon Apr 23 10:46:00 2018
+Created on Thu Apr 26 10:46:00 2018
 
 @author: jercas
 """
@@ -54,6 +54,7 @@ if args["model"] in ("inception", "xception"):
 # Load network weights from disk.
 print("[INFO] loading {}...".format(args["model"]))
 Network = MODELS[args["model"]]
+# Adaptive function call.
 model = Network(weights="imagenet")
 
 # Load the input image using the keras helper utility while ensuring the image is resized to 'inoutShape', the required
