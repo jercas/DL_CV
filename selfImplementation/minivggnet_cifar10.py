@@ -115,7 +115,7 @@ if args["checkpoint"]:
 
 # Train.
 print("[INFO] training network...")
-Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1)
+Hypo = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=64, epochs=40, verbose=1, callbacks=callbacks)
 
 # Evaluate.
 print("[INFO] evaluating network...")
