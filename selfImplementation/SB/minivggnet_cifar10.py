@@ -18,7 +18,7 @@ matplotlib.use("Agg")
 
 from callbacks.trainingMonitor import TrainingMonitor
 from nn.conv.minivggnet import MiniVGGNet
-from stepBased_lr_decay import stepBased_decay
+from SB.stepBased_lr_decay import stepBased_decay
 import matplotlib.pyplot as plt
 import numpy as np
 import argparse
