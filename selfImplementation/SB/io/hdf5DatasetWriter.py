@@ -3,6 +3,7 @@ Created on Tue May 8 16:11:00 2018
 
 @author: jercas
 """
+import numpy as np
 import h5py
 import os
 
@@ -32,7 +33,7 @@ class HDF5DatasetWriter:
 			                 outputPath)
 		# Open the HDF5 database for writing and create two datasets:
 		# one to store the images/features and another to store the class labels.from
-		self.db = h5py.File(outputPath, 'w')
+		self.db = h5py.File(outputPath, "w")
 		# Create a dataset with the dataKey name and the supplied dims - this is where we will store raw images/extracted features.
 		self.data = self.db.create_dataset(dataKey, dims, dtype="float")
 		# Create a second dataset for storing class labels(integer) for each record in the dataset.
@@ -76,7 +77,7 @@ class HDF5DatasetWriter:
 		"""
 			Create a dataset to store the actual class label names then store the class labels in a separate dataset.
 		"""
-		dt = h5py.special_dtype(vlen=unicode)
+		dt = h5py.special_dtype(vlen=str)
 		labelSet = self.db.create_dataset("label_names", (len(classLabels),), dtype=dt)
 		labelSet[:] = classLabels
 

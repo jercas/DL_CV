@@ -51,17 +51,17 @@ sdl = SimpleDatasetLoader(preprocessors=[aap, iap])
 data = data.astype("float") / 255.0
 
 # Convert the labels from integers to vectors.
-# Keras.utils.to_categorical() can just transform integer label to one-hot code array.
+# Keras.utils.to_categorical() can just transform "integer" label to one-hot code array.
 # Keras.utils.to_categorical() has the same effect and return as keras.utils.np_utils.to_categorical().
 # labels = to_categorical(labels, CLASSES)
 
-# sklearn.preprocessing.LabelEncoder() can transform string label to a single number, so we next call keras.utils.np_utils.to_categorical() to transform each
-#single number to a one-hot code array.
+# sklearn.preprocessing.LabelEncoder() can transform "string" label to a "single number", so we next call keras.utils.np_utils.to_categorical() to transform each
+#single "integer number" to a one-hot code array.
 # le = LabelEncoder()
 # strToNum = le.fit_trainsform(labels)
 # labels = np_utils.to_categorical(strToNum, CLASSES)
 
-# sklearn.preprocessing.LabelBinary() can directly transform string label to one-hot code array.
+# sklearn.preprocessing.LabelBinary() can "directly" transform "string" label to one-hot code array.
 lb =LabelBinarizer()
 labels = lb.fit_transform(labels)
 
@@ -91,13 +91,13 @@ if args["augment"]:
 									steps_per_epoch=len(trainX) // 32,          # Controls the number of batches per epoch.
 																				# Typical determine this parameter's value by dividing the total number of
 																				#training samples by batch size and then casting it to an integer(//).
-									epochs=100, verbose=1)
+									shuffle=True, epochs=100, verbose=1)
 	dataAug = "with_DataAug"
 
 else:
 	# Training model.
 	print("[INFO] training model...")
-	History = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=32, epochs=100, verbose=1)
+	History = model.fit(trainX, trainY, validation_data=(testX, testY), batch_size=32, shuffle=True, epochs=100, verbose=1)
 	dataAug = "withOut_DataAug"
 
 # Evaluating Phase:
