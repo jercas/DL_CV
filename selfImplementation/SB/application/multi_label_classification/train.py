@@ -12,6 +12,7 @@ from keras.preprocessing.image import ImageDataGenerator, img_to_array
 from keras.optimizers import Adam
 from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from SB.nn.conv.smallvggnet import SmallVGGNet
 
 import matplotlib.pyplot as plt
@@ -96,7 +97,7 @@ for (i, label) in enumerate(mlb.classes_):
 	print("{}. {}.".format(i + 1, label))
 
 # Partition the data into training and testing splits using 80% of the data for training and the remaining 20% for testing.
-(trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.2, random_state=42)
+(trainX, testX, trainY, testY) = train_test_split(data, labels, test_size=0.2, stratify=labels, random_state=42)
 
 # Construct the image generator for data augmentation.
 aug = ImageDataGenerator(rotation_range=25,
@@ -136,6 +137,17 @@ model.save(args["model"])
 print("[INFO] Save label binarizer...")
 f = open(args["labelbin"], 'wb')
 f.write(pickle.dumps(mlb))
+f.close()
+
+# Evaluate model.
+predictions = model.predict(testX, batch_size=64, verbose=1)
+report = classification_report(testY.argmax(axis=1),
+                               predictions.argmax(axis=1),
+                               target_names=mlb.classes_)
+print(report)
+# Serialize report.
+f = open("./output/report.txt", "w")
+f.write(report)
 f.close()
 
 # plot the training loss and accuracy
