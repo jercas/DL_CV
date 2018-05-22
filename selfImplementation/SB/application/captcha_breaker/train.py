@@ -11,7 +11,7 @@ from keras.preprocessing.image import img_to_array
 from keras.optimizers import SGD
 
 from nn.conv.lenet import LeNet
-from selfImplementation.utils.captchahelper import preprocess
+from utils.captchahelper import preprocess
 from imutils import paths
 
 import matplotlib.pyplot as plt
