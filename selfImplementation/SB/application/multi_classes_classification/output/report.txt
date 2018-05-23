@@ -1,0 +1,9 @@
+             precision    recall  f1-score   support
+
+  bulbasaur       0.92      0.94      0.93        47
+ charmander       0.90      0.90      0.90        48
+     mewtwo       0.94      0.98      0.96        48
+    pikachu       0.93      0.91      0.92        47
+   squirtle       0.88      0.84      0.86        44
+
+avg / total       0.91      0.91      0.91       234

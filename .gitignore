@@ -26,7 +26,8 @@ wheels/
 *.egg
 sourceCode/
 .idea/
-selfImplementation/SB/application/multi_label_classification/dataset
+selfImplementation/SB/application/multi_labels_classification/dataset
+selfImplementation/SB/application/multi_classes_classification/dataset
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
