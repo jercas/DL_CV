@@ -5,7 +5,7 @@ Created on Thu May 24 16:05:00 2018
 """
 
 # Define the paths to the image directory.
-IMAGES_PATH = "./dataset/kaggle_dogs_vs_cats/train"
+IMAGES_PATH = "./dataset/train"
 
 # Since we don't have validation data or access to the testing labels, we need to take a number of images from training set
 #as validation set.
@@ -14,9 +14,9 @@ NUM_VAL_CLASSES = 1250 * NUM_CLASSES
 NUM_TEST_CLASSES = 1250 * NUM_CLASSES
 
 # Define the path to the output training, validation, and testing HDF5 files/output serialized weights.
-TRAIN_HDF5 = "./dataset/kaggle_dogs_vs_cats/hdf5/train.hdf5"
-VAL_HDF5 = "./dataset/kaggle_dogs_vs_cats/hdf5/val.hdf5"
-TEST_HDF5 = "./dataset/kaggle_dogs_vs_cats/hdf5/test.hdf5"
+TRAIN_HDF5 = "./dataset/hdf5/train.hdf5"
+VAL_HDF5 = "./dataset/hdf5/val.hdf5"
+TEST_HDF5 = "./dataset/hdf5/test.hdf5"
 
 # Define the path to the output model file.
 MODEL_PATH = "./model/alexnet_dogs_vs_cats.model"
