@@ -69,7 +69,7 @@ class HDF5DatasetReader:
 					images = np.array(processedImages)
 				# If the data augmenator exists, apply it.
 				if self.aug is not None:
-					# Yielding a 2-tuple of the batch of images and labels to the calling Keras generator.
+					# Yielding a 2-tuple of the batch of images and labels to the calling Keras generator for data augmentation.
 					(images, labels) = next(self.aug.flow(images, labels, batch_size=self.batchSize))
 				# yield a tuple of images and labels
 				yield (images, labels)
