@@ -29,4 +29,4 @@ CHECKPOINT_PATH  = "./model"
 
 # Training Hyper-parameters.
 BATCH_SIZE = 128
-EPOCHS = 75
+EPOCHS = 2

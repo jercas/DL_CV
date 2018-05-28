@@ -14,7 +14,7 @@ class MeanPreprocessor:
 		self.bMean = bMean
 
 
-	def preprocessor(self, image):
+	def preprocess(self, image):
 		# Split the image into its respective Red, Green, Blue channels.
 		# OpenCV represents images in BGR order rather than RGB, hence why return tuple has the signature (B, G, R) rather than (R, G, B)
 		(B, G, R) = cv2.split(image.astype("float32"))

@@ -8,7 +8,7 @@ Created on Mon May 28 13:45:00 2018
 import matplotlib
 matplotlib.use("Agg")
 
-from SB.application.kaggle_dogs_vs_cats.config import dogs_vs_cats_config as config
+from config import dogs_vs_cats_config as config
 from SB.preprocessing.MeanPreprocessor import MeanPreprocessor
 from SB.preprocessing.PatchPreprocessor import PatchPreprocessor
 from SB.preprocessing.SimplePreprocessor import SimplePreprocessor
@@ -57,18 +57,19 @@ valGen = HDF5DatasetReader(dbPath=config.VAL_HDF5,
                              classes=config.NUM_CLASSES)
 # Initialize the optimizer.
 print("[INFO] compiling model...")
-opt = Adam(lr=1e-3)
+opt = Adam(lr=1e-3, decay=1e-3/config.EPOCHS)
 model = AlexNet.build(width=227, height=227, depth=3, classes=config.NUM_CLASSES, reg=0.0002)
-model.compile(loss="binray_crossentropy", optimizer=opt, metrics=["accuracy"])
+model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # Construct the set of callbacks.
 plotPath = os.path.sep.join([config.OUTPUT_PATH, "{}".format(os.getpid())])
 if not os.path.exists(plotPath):
 	os.mkdir(plotPath)
 
-checkpointPath = os.path.sep.join(["{}/{}/".format(config.CHECKPOINT_PATH, os.getpid()), "checkpoint-{epoch:03d}-{val_loss:.4f}.hd5f"])
+checkpointPath = os.path.join("{}/{}/".format(config.CHECKPOINT_PATH, "{}".format(os.getpid())))
 if not os.path.exists(checkpointPath):
-	os.mkdir(plotPath)
+	os.mkdir(checkpointPath)
+checkpointPath = os.path.join(checkpointPath, "checkpoint-{epoch:03d}-{val_loss:.4f}.hd5f")
 
 checkpoint = ModelCheckpoint(filepath=checkpointPath, monitor="val_loss", mode="min", save_best_only=True, verbose=1)
 trainingMonitor = TrainingMonitor(plotPath)
