@@ -25,3 +25,8 @@ MODEL_PATH = "./model/alexnet_dogs_vs_cats.model"
 DATASET_MEAN = "./model/dogs_vs_cats_mean.json"
 # Define the path to the output directory used for storing plots, classification reports, etc.
 OUTPUT_PATH = "./output"
+CHECKPOINT_PATH  = "./model"
+
+# Training Hyper-parameters.
+BATCH_SIZE = 128
+EPOCHS = 75
