@@ -1,0 +1,6 @@
+             precision    recall  f1-score   support
+
+        cat       0.99      0.99      0.99      3109
+        dog       0.99      0.99      0.99      3141
+
+avg / total       0.99      0.99      0.99      6250
