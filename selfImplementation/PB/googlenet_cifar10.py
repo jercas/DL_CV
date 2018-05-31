@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use("Agg")
 
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.metrics import classification_report, accuracy_score
 from SB.nn.conv.minigooglenet import MiniGoogLeNet
 from SB.callbacks.trainingMonitor import TrainingMonitor
 from PB.polynomial_lr_decay import polynomial_decay
@@ -29,6 +30,18 @@ args = vars(ap.parse_args())
 # Store the parsed argument.
 MODEL_PATH = args["model"]
 OUTPUT_PATH = args["output"]
+
+# Initialize the label names of the CIFAR-10 dataset for classification_report() tabulate.
+labelNames = ["airplane",
+              "automobile",
+              "bird",
+              "cat",
+              "deer",
+              "dog",
+              "frog",
+              "horse",
+              "ship",
+              "truck"]
 
 # Load the training and testing data, then converting the raw images from integers to floats.
 print("[INFO] loading CIFAR-10 data...")
@@ -74,6 +87,22 @@ model.fit_generator(aug.flow(trainX, trainY, batch_size=64),
                     validation_data=(testX, testY),
                     steps_per_epoch=len(trainX) // 64,
                     epochs=70, callbacks=callbacks, verbose=1)
+
+# Predict the model.
+print("[INFO] evaluating model...")
+predictions = model.predict(testX, batch_size=64)
+report = classification_report(testY.argmax(axis=1), predictions.argmax(axis=1), target_names=labelNames)
+print(report)
+
+# Serialize report.
+path = [OUTPUT_PATH, "model_classification_report.txt"]
+f = open(os.path.sep.join(path), "w")
+f.write(report)
+f.close()
+
+# Compute the raw acc with extra precision.
+acc = accuracy_score(testY, predictions)
+print("[INFO] score: {}".format(acc))
 
 # Serialize the model.
 print("[INFO] serializing model...")
