@@ -28,5 +28,5 @@ OUTPUT_PATH = "./output"
 CHECKPOINT_PATH  = "./model"
 
 # Training Hyper-parameters.
-BATCH_SIZE = 128
-EPOCHS = 2
+BATCH_SIZE = 64
+EPOCHS = 75

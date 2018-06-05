@@ -36,3 +36,7 @@ MODEL_DIR  = "./model"
 MODEL_PATH   = path.sep.join([MODEL_DIR, "checkpoints/deeperGoogLeNet_tinyImageNet.hdf5"])
 FIGURE_PATH  = path.sep.join([OUTPUT_DIR, "deeperGoogLeNet_tinyImageNet.png"])
 JSON_PATH    = path.sep.join([OUTPUT_DIR, "deeperGoogLeNet_tinyImageNet.json"])
+
+# Training hyper-parameters.
+BATCH_SIZE = 64
+EPOCHS = 10
