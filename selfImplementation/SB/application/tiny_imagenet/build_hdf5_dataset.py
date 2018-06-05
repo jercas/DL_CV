@@ -8,7 +8,7 @@ import tiny_imagenet_config as config
 # Using the LabelEncoder to encode the WordNet IDs as single integers.
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from io.hdf5DatasetWriter import HDF5DatasetWriter
+from SB.io.hdf5DatasetWriter import HDF5DatasetWriter
 from imutils import paths
 import numpy as np
 import progressbar
