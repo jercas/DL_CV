@@ -38,5 +38,5 @@ FIGURE_PATH  = path.sep.join([OUTPUT_DIR, "deeperGoogLeNet_tinyImageNet.png"])
 JSON_PATH    = path.sep.join([OUTPUT_DIR, "deeperGoogLeNet_tinyImageNet.json"])
 
 # Training hyper-parameters.
-BATCH_SIZE = 64
-EPOCHS = 10
+BATCH_SIZE = 32
+EPOCHS = 70

@@ -13,7 +13,7 @@ from preprocessing.MeanPreprocessor import MeanPreprocessor
 from preprocessing.PatchPreprocessor import PatchPreprocessor
 from callbacks.trainingMonitor import TrainingMonitor
 from callbacks.epochCheckPoint import EpochCheckpoint
-from io.hdf5DatasetReader import HDF5DatasetReader
+from SB.io.hdf5DatasetReader import HDF5DatasetReader
 from nn.conv.deepergoolenet import DeeperGoogLeNet
 
 from keras.preprocessing.image import ImageDataGenerator
@@ -50,7 +50,7 @@ iap = ImageToArrayPreprocessor()
 # Initialize the training and validation dataset generators.
 trainGen = HDF5DatasetReader(dbPath=config.TRAIN_HDF5,
                              batchSize=config.BATCH_SIZE,
-                             preprocessors=[pp, mp, iap],
+                             preprocessors=[sp, mp, iap],
                              aug=aug,
                              classes=config.NUM_CLASSES)
 valGen   = HDF5DatasetReader(dbPath=config.VAL_HDF5,
