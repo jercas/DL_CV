@@ -12,6 +12,8 @@ from sklearn.metrics import accuracy_score, classification_report
 from nn.conv.resnet import ResNet
 from callbacks.epochCheckPoint import EpochCheckpoint
 from callbacks.trainingMonitor import TrainingMonitor
+from PB.polynomial_lr_decay import resnet_cifar10_polynomial_decay as polynomial_decay
+from keras.callbacks import LearningRateScheduler
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import SGD
 from keras.datasets import cifar10
@@ -84,6 +86,7 @@ if MODEL_PATH is None:
 	#       The remaining entries, 64, 128, and 256 correspond to the number of filters each of the residual module stages will learn.
 	model = ResNet.build(width=32, height=32, depth=3, classes=len(labelNames),
 	                     stages=(9, 9, 9), filters=(64, 64, 128, 256), reg=5e-4)
+	model.compile(loss="categorical_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 # Otherwise, load the checkpoint from disk.
 else:
@@ -105,7 +108,8 @@ if not os.path.exists(OUTPUT_PATH):
 figurePath = "{}/{}.json".format(OUTPUT_PATH, os.getpid())
 jsonPath = "{}/{}.json".format(OUTPUT_PATH, os.getpid())
 callbacks = [TrainingMonitor(figurePath=figurePath, jsonPath=jsonPath, startAt=START_EPOCH),
-             EpochCheckpoint(CHECKPOINTS_PATH, every=5, startAt=START_EPOCH)]
+             EpochCheckpoint(CHECKPOINTS_PATH, every=5, startAt=START_EPOCH),
+             LearningRateScheduler(polynomial_decay)]
 
 # Train the network.
 print("[INFO] training network...")

@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report, accuracy_score
 from SB.nn.conv.minigooglenet import MiniGoogLeNet
 from SB.callbacks.trainingMonitor import TrainingMonitor
-from PB.polynomial_lr_decay import polynomial_decay
+from PB.polynomial_lr_decay import googlenet_cifar10_polynomial_decay as polynomial_decay
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import LearningRateScheduler
 from keras.optimizers import SGD
