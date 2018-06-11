@@ -70,7 +70,25 @@ def batch_processing(model, batchROIs, batchLocs, labels, minProb=0.5, top=10, d
 		top: The number of top-K predictions to be returned by the network.
 		dims: Spatial dimensions of the bounding box (should match spatial dimensions of the network).
 	Return:
+		labels: The processed labels dictionary.
 	"""
 	# Pass batch ROIs through trained model and decode the predictions.
 	preds = model.predict(batchROIs)
+	# Since we will be using a network pre-trained on ImageNet for this example, we’ll need to decode the predictions.
 	preds = imagenet_utils.decode_predictions(preds, top=top)
+	# Loop over each of the decoded predictions made by the CNN.
+	for i in range(0, len(preds)):
+		for (_, label, prob) in preds[i]:
+			# Filter out weak detections by ensuring the predicted probability is greater than the minimum probability.
+			if prob > minProb:
+				# Grab the coordinates of the sliding window for the prediction and construct the bounding box.
+				(pX, pY) = batchLocs[i]
+				box = (pX, pY, pX+dims[0], pY+dims[1])
+
+				# Grab the list of predictions for the label and add the bounding box + probability to the list.
+				L = labels.get(label, [])
+				# Adding the bounding box + associated probability to the list.
+				L.append((box, prob))
+				labels[label] = L
+	# Return the labels dictionary.
+	return labels
