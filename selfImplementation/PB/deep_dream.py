@@ -55,6 +55,7 @@ def resize_image(image, size):
 def eval_loss_and_gradients(X):
 	# Fetch the loss and gradients given the input.
 	output = fetchLossGrads([X])
+	# Unpack the tuple to get loss and gradient, respectively.
 	(loss, grad) = (output[0], output[1])
 	return (loss, grad)
 
