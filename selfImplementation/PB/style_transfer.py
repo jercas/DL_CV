@@ -10,9 +10,9 @@ from keras.applications import VGG19
 # Initialize the settings dictionary which contains some parameters.
 SETTINGS = {
 	# Initialize the path to the input (i.e., content) image, style image, and the path to output dictionary.
-	"input_path": "input/jp.jpg",
-	"style_path": "input/starry_night.jpg",
-	"output_path": "output/style_transfer",
+	"input_path": "input/bob_ross",
+	"style_path": "input/fallingwater.jpg",
+	"output_path": "output/style_transfer/bobross_fallingwater",
 
 	# Define the CNN to be used for style transfer, along with the set of content layer and style layers, respectively.
 	"net": VGG19,
