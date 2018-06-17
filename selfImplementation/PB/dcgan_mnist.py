@@ -104,7 +104,7 @@ for epoch in range(NUM_EPOCHS):
 
 		# Train generator via the adversarial model by (1) generating random noise and (2) training the generator with
 		#the discriminator weights frozen.
-		noise = np.random.uniform(-1, 1, size=(BATCH_SIZE))
+		noise = np.random.uniform(-1, 1, size=(BATCH_SIZE, 100))
 		"""
 			We first generate a total of BATCH_SIZE random vectors. However, unlike in our previous code block where we 
 		were nice enough to tell our discriminator what is real vs. fake, we’re now going to try to trick the discriminator 
