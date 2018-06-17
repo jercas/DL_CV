@@ -10,7 +10,7 @@ from keras.applications import VGG19
 # Initialize the settings dictionary which contains some parameters.
 SETTINGS = {
 	# Initialize the path to the input (i.e., content) image, style image, and the path to output dictionary.
-	"input_path": "input/bob_ross",
+	"input_path": "input/bob_ross.jpg",
 	"style_path": "input/fallingwater.jpg",
 	"output_path": "output/style_transfer/bobross_fallingwater",
 
