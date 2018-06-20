@@ -27,6 +27,7 @@ wheels/
 sourceCode/
 .idea/
 dataset/
+ukbench100/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
