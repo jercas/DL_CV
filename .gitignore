@@ -28,6 +28,9 @@ sourceCode/
 .idea/
 dataset/
 ukbench100/
+selfImplementation/IB/neural-style-transfer/
+selfImplementation/IB/opencv-semantic-segmentation/
+selfImplementation/IB/objectDection_SSD/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
